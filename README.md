@@ -4,8 +4,7 @@
    <p>Screens</p>
   
  ![Screenrecorder-2023-06-13-11-20-42-21](https://github.com/Neves369/CryptoCurrency/assets/63128431/8e930442-3e0f-4a52-abd5-576afaed4c70)
-  
-  
+  ![Screenrecorder-2023-06-13-11-21-34-949](https://github.com/Neves369/CryptoCurrency/assets/63128431/27ed4eee-1fec-49da-8c9f-dae322b4779a)
   
   <p>cryptocurrency quote application template.</p>
 </div>
