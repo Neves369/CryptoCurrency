@@ -3,27 +3,44 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as React from "react";
+import { ColorSchemeName, Text, View, Image } from "react-native";
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
+import Creditos from "../screens/Transacoes";
+import NotFound from "../screens/NotFound";
+import Precos from "../screens/Precos";
+import Dashboard from "../screens/Dashboard";
+import Configuracoes from "../screens/Configuracoes";
+import {
+  RootStackParamList,
+  RootTabParamList,
+  RootTabScreenProps,
+} from "../types";
+import Detalhes from "../screens/Detalhes";
+import LinkingConfiguration from "./LinkingConfiguration";
+import { COLORS, FONTS, icons, SIZES } from "../constants";
+import Transacoes from "../screens/Transacoes";
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation({
+  colorScheme,
+}: {
+  colorScheme: ColorSchemeName;
+}) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    >
       <RootNavigator />
     </NavigationContainer>
   );
@@ -38,10 +55,30 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFound}
+        options={{ title: "Oops!" }}
+      />
+      <Stack.Screen
+        name="Detalhes"
+        component={Detalhes}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="Transações"
+        component={Transacoes}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen name="Créditos" component={Creditos} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -58,38 +95,113 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Dashboard"
       screenOptions={{
+        headerShown: false,
         tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}>
+      }}
+    >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
+        name="Dashboard"
+        component={Dashboard}
+        options={({ navigation }: RootTabScreenProps<"Dashboard">) => ({
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <Image
+              source={icons.home}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: color,
+              }}
+            />
           ),
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Portifolio"
+        component={Configuracoes}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Portifólio",
+          tabBarIcon: ({ color }) => (
+            <Image
+              source={icons.pie_chart}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: color,
+              }}
+            />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Transacoes"
+        component={Transacoes}
+        options={{
+          tabBarLabel: ({ focused }) => {
+            let label;
+            return (label = focused ? (
+              <Text style={{ fontSize: 10, color: "gray" }}></Text>
+            ) : null);
+          },
+          tabBarIcon: ({ color }) => (
+            <View
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 40,
+                backgroundColor: COLORS.secondary,
+                marginTop: -30,
+                elevation: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={icons.transaction}
+                style={{
+                  width: 30,
+                  height: 30,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </View>
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Precos"
+        component={Configuracoes}
+        options={{
+          title: "Prices",
+          tabBarIcon: ({ color }) => (
+            <Image
+              source={icons.line_graph}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: color,
+              }}
+            />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Configuracoes"
+        component={Configuracoes}
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => (
+            <Image
+              source={icons.settings}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: color,
+              }}
+            />
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -100,7 +212,7 @@ function BottomTabNavigator() {
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
